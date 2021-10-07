@@ -1,3 +1,4 @@
+import flask
 from flask import Flask
 import mysql.connector
 import os
@@ -26,7 +27,9 @@ def getImages():
     result = cursorA.fetchall()
     cnx.close()
     resultJson =json.dumps(parseResults(result))
-    return resultJson
+    resp = flask.Response(resultJson)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 def parseResults(resultList):
     results=[]
