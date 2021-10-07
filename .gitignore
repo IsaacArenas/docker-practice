@@ -1,2 +1,4 @@
 flask-project/dockerfile
 docker-compose.yml
+.DS_STORE
+*.DS_STORE
