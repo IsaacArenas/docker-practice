@@ -13,7 +13,7 @@ import axios from 'axios';
     name: 'Index',
     mounted () {
     axios
-      .get('http://backend:5000/images').then(response => (this.info = response.data))
+      .get('http://127.0.0.1:5000/images').then(response => (this.info = response.data))
     },
     data: () => ({
       info:""
