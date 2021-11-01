@@ -19,7 +19,7 @@ As mention before the system is ready to be integrated no coding is needed for t
 
 So This is what we are trying to build...
 
-**image here 
+![arch](documentation/images/docker-practice.png)
 
 as shown in the picture we would have 2 networks one containing tha api and database and one containing only the frontend.
 
@@ -32,6 +32,7 @@ $ ./build_frontend.sh frontend:1.0
 ```
 
 # Using the FrontEnd
+To use the image that has been created by the script on your ```docker-compose.yml``` create a service called **frontend** and linke the **port 80 on the container to 8080 on your box**
 
 # Using The Database
 The Database folder contains an ```set_db.sql``` script that initialize the db with the next steps 
@@ -44,10 +45,38 @@ The Database folder contains an ```set_db.sql``` script that initialize the db w
 
 For this on execution you can use a mysql or mariadb database just by mounting the sql file on the entrypoint directory would executed on initialization of the container.
 
-On your ```docker-compose.yml``` you can set something like 
+On your ```docker-compose.yml``` create a service called **database** and s should contain something like the next code snippet with MYSQL_ROOT_PASSWORD been populated from the ```.env``` file
 
 ```yaml
-- services:
-    - database
-    # ...
+services:
+  #----------- MARIA DB ----------------
+  database:
+    image: mariadb:10.5.12
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
+    volumes: 
+      - ./database/set_db.sql:/docker-entrypoint-initdb.d/script.sql
+
 ```
+
+# Building the API
+As mentioned before part of this workshop is to create a ```dockefile``` for the api itself you can see the instructions on the [flask-project](flask-project/ReadMe.md)
+
+# Using The API
+To use the api on your ```docker-compose.yml``` create a service called **backend** and add the next variables that are contained on the provided ```.env``` f
+
+```yaml
+- environment:  
+    - FLASK_APP=${APP_NAME}
+    - DB_USER=${DB_ADMIN}
+    - DB_USER_PASS=${DB_ADMIN_PASS}
+    - DB_HOST=${DB_HOST}
+    - DB_NAME=${DB_NAME}
+```
+link the **port 5000 on the container to 5000 on your box**
+
+> Note: the name of the services should be mapped correctly since the code is using those hostname to interconnect the 3 of them: **database, frontend, backend**
+
+# Summary 
+to summarise the goal is to create 2 files ```flask-project/dockerfile``` using the intructions on (flask-project/ReadMe.md) and ```docker-compose.yml``` using the instructions provided on this file for the 3 different services.
+
